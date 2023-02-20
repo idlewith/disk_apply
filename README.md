@@ -22,3 +22,24 @@ chmod +x file4
 [cp_with_subprocess.py](cp_with_subprocess.py) use cp in multiple cores
 
 
+# solution
+
+## solution 1
+
+
+
+What about using a Live System and
+
+```
+sudo dd if=/dev/sdx0 of=/dev/sdy0
+```
+
+and
+
+```
+sudo resize2fs /dev/sdy0
+```
+
+afterwards to resize the partition.
+
+With sdx0 being your old partition and sdy0 being the new one.
