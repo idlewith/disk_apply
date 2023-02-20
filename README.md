@@ -6,7 +6,7 @@
 ```shell
 for i in {1..10}
 do
-dd if=/dev/urandom of=/root/disk_apply/new/file${i} bs=500M count=5;
+dd if=/dev/urandom of=/root/disk_apply/new/file${i} bs=500M count=5
 done
 ```
 
