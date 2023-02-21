@@ -3,6 +3,7 @@ import time
 from subprocess import PIPE, Popen
 import os
 from multiprocessing import Pool
+import shutil
 
 
 root_path = "/root/disk_apply"
