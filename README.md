@@ -4,9 +4,9 @@
 
 
 ```shell
-for i in {1..10}
+for i in {1..5}
 do
-dd if=/dev/urandom of=/root/disk_apply/new/file${i} bs=500M count=5
+dd if=/dev/urandom of=/root/disk_apply/old/file${i} bs=500M count=5
 done
 ```
 
@@ -20,6 +20,16 @@ chmod +x file4
 [cp.py](cp.py) use cp once
 
 [cp_with_subprocess.py](cp_with_subprocess.py) use cp in multiple cores
+
+
+# vm
+
+```shell
+ifconfig
+ssh parallels@10.211.55.4
+sudo -i 
+centos123
+```
 
 
 # solution
