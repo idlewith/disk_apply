@@ -53,3 +53,13 @@ sudo resize2fs /dev/sdy0
 afterwards to resize the partition.
 
 With sdx0 being your old partition and sdy0 being the new one.
+
+
+## solution 2
+
+好吧，我相信您可以使用gnu parallel来完成您的任务。
+
+```
+seq 70 | parallel -j70 cp filename
+```
+
