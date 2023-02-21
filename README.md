@@ -4,11 +4,13 @@
 
 
 ```shell
-for i in {1..5}
+for i in {1..50}
 do
-dd if=/dev/urandom of=/root/disk_apply/old/file${i} bs=500M count=5
+dd if=/dev/urandom of=/root/disk_apply/old/apps/file${i} bs=500M count=5
 done
 ```
+
+
 
 # make one file specially
 
