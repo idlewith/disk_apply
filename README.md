@@ -65,3 +65,31 @@ With sdx0 being your old partition and sdy0 being the new one.
 seq 70 | parallel -j70 cp filename
 ```
 
+
+## solution 3
+
+**prepare**
+
+fdisk
+
+mkfs.ext4 /dev/sdb
+
+mkdir /mnt/newdisk
+
+mount /dev/sdb /mnt/newdisk
+
+df -h
+
+
+**copy**
+
+dd if=/dev/source of=/dev/target bs=1M
+
+cp -a --attributes-only /path/to/source/* /path/to/target/
+
+
+
+
+
+
+
