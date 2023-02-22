@@ -6,7 +6,7 @@
 ```shell
 for i in {1..25}
 do
-dd if=/dev/urandom of=/opt/huawei/apps/file${i} bs=500M count=5
+dd if=/dev/urandom of=/opt/huawei/logs/yesterday/file${i} bs=500M count=5
 done
 ```
 
@@ -115,7 +115,16 @@ cp -a --attributes-only /path/to/source/* /path/to/target/
 date && cp -a --attributes-only /opt/huawei/* /opt/test && date
 
 
+35秒
+date && rsync -aW /opt/huawei/* /opt/test && date
 
+15秒
+date && cp -ar /opt/huawei/* /opt/test && date
+
+
+对比整个目录是否一致
+
+diff -r /opt/huawei /opt/test
 
 
 
