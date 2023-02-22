@@ -1,68 +1,64 @@
 # encoding: utf-8
+import multiprocessing
+import os
 import time
 from subprocess import PIPE, Popen
-import os
-from multiprocessing import Pool
-import shutil
 
-
-root_path = "/root/disk_apply"
-old_path = os.path.join(root_path, "old")
-new_path = os.path.join(root_path, "new")
+old_path = "/opt/huawei"
+new_path = "/opt/test"
 
 
 def run(command):
     stdout, stderr = Popen(command, stdout=PIPE, shell=True).communicate()
-    return str(stdout)
+    return stdout.decode("utf-8")
 
 
-def copy():
-    # old -> new
-    command = "sudo cp -ar /root/disk_apply/old/* /root/disk_apply/new"
-    output = run(command)
-    print(output)
+def main():
+    make_dirs()
+    file_list = get_all_files()
+    command_list = gen_cp_command(file_list)
+    return command_list
 
 
-def apply_async_with_callback():
-    pool = mp.Pool()
-    for i in range(10):
-        pool.apply_async(copy, args=(i,))
-    pool.close()
-    pool.join()
+def make_dirs():
+    command = "find /opt/huawei/ -type d|sed  's/\/opt\/huawei\///g'|xargs -I {} mkdir -p /opt/test/{}"
+    run(command)
 
 
-def create_dir(dirname):
-    if not os.path.exists(dirname):
-        os.mkdir(dirname)
+def get_all_files():
+    command = "find /opt/huawei -type f"
+    files = run(command)
+    file_list = []
+    for f in files.split("\n"):
+        if f:
+            file_list.append(f)
+
+    command = "find /opt/huawei -type l"
+    links = run(command)
+    link_list = []
+    for l in links.split("\n"):
+        if l:
+            link_list.append(l)
+
+    return file_list + link_list
 
 
-def walk_files():
-    dirs_out = []
-    for root, dirs, files in os.walk(old_path):
-        for dirname in dirs:
-            dir_absolute = os.path.join(root, dirname)
-            dirs_out.append(dir_absolute)
-
+def gen_cp_command(file_list):
     command_list = []
-    dirs_out = dirs_out[:-1]
-    for d in dirs_out:
-        command = f"cp -ar {d} {new_path}"
+    for f in file_list:
+        d = f.replace(old_path, new_path)
+        command = f"sudo cp -a  {f} {d}"
         command_list.append(command)
     return command_list
 
 
-def main():
-    command_list = walk_files()
-    with Pool(3) as p:
-        print(p.map(run, command_list))
-
-
 if __name__ == "__main__":
     start = time.time()
-    # main()
+    command_list = main()
 
-    command_list = walk_files()
-    with Pool(3) as p:
-        p.apply_async(run, command_list)
+    pool = multiprocessing.Pool(processes=multiprocessing.cpu_count())
+    pool.map(run, command_list)
+    pool.close()
+    pool.join()
 
     print(time.time() - start)
