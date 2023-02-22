@@ -127,5 +127,57 @@ date && cp -ar /opt/huawei/* /opt/test && date
 diff -r /opt/huawei /opt/test
 
 
+## solution 4
+
+export SOURCE="/opt/huawei"
+export DESTINATION="/opt/test"
+
+find ${SOURCE} -type d | while read dir
+do
+echo $dir
+done
+
+date && rsync --owner --group --archive --copy-links --whole-file --relative --no-compress --progress /opt/huawei/* /opt/test && date
+
+
+
+**rsync + parallel**
+
+find ${SOURCE} -type f > /root/backup.txt
+
+date && time (cat /root/backup.txt | parallel -j 8 \
+rsync --owner --group \
+  --archive --copy-links --whole-file \
+  --relative --no-compress --progress {} ${DESTINATION}) && date
+
+
+rsync --owner --group --archive --copy-links --whole-file --relative --no-compress --progress /opt/huawei/apps/file4 /opt/test
+
+
+
+
+rsync -a --owner --group --archive --copy-links --whole-file --relative --no-compress --progress /home/user2 ${DESTINATION}
+
+
+
+
+
+
+
+find /opt/huawei/ -type d|sed  's/\/opt\/huawei\///g'|xargs -I {} mkdir -p /opt/test/{}
+
+rsync -a /opt/huawei/logs/today/file1 /opt/test/logs/today/file1
+
+
+find ${SOURCE} -type f > /root/backup.txt
+
+find /opt/huawei -type f > /root/backup.txt
+
+date && time (cat /root/backup.txt | parallel -j 8 \
+rsync --owner --group \
+--archive --copy-links --whole-file \
+--relative --no-compress --progress {} ${DESTINATION}) && date
+
+
 
 
